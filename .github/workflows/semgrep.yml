@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: 'juice-shop/juice-shop'
-      - run: semgrep scan --sarif --output=semgrep.sarif --config=auto --include=*.js
+      - run: semgrep scan --sarif --output=semgrep.sarif --config=auto 
       - uses: actions/upload-artifact@v2
         with:
           name: semgrep-report
