@@ -11,7 +11,10 @@ jobs:
         with:
           repository: 'juice-shop/juice-shop'
       - run: semgrep scan --sarif --output=semgrep.sarif --config=auto --include=*.js
-      - run: echo "SEMGREP_SARIF=$(base64 < semgrep.sarif | tr -d '\n')" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v2
+        with:
+          name: semgrep-report
+          path: semgrep.sarif
   send_report:
     if: ${{ always() }}
     needs: semgrep
@@ -19,9 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: base64 -d << "${{ env.SEMGREP_SARIF }}" > semgrep.sarif
+      - uses: actions/download-artifact@v2
+        with:
+          name: semgrep-report
       - name: Upload SARIF file for GitHub Advanced Security Dashboard
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: semgrep.sarif
-        if: always()
