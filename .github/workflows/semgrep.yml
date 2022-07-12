@@ -12,6 +12,8 @@ jobs:
       image: returntocorp/semgrep
     steps:
       - uses: actions/checkout@v3
+        with:
+          repository: 'juice-shop/juice-shop'
 
       # Select rules for your scan with one of these two options:
       #
